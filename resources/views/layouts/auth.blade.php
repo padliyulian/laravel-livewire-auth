@@ -4,8 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Livewire AUTH</title>
+    <title>{{ $title ?? 'Livewire Auth' }}</title>
     <link rel="icon" href="/favicon.ico" />
+    <!-- CSRF Token -->
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <link
         rel="stylesheet"
         href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&amp;display=fallback"
@@ -26,6 +28,7 @@
         rel="stylesheet"
         href="{{asset('/assets/vendor/adminlte/adminlte.min.css')}}"
     >
+    @livewireStyles
     @stack('page-css')
 </head>
 <body class="hold-transition login-page">
@@ -35,6 +38,7 @@
     <script src="{{asset('/assets/vendor/adminlte/jquery.min.js')}}"></script>
     <script src="{{asset('/assets/vendor/adminlte/bootstrap.bundle.min.js')}}"></script>
     <script src="{{asset('/assets/vendor/adminlte/adminlte.min.js')}}"></script>
+    @livewireScripts
     @stack('page-js')
 </body>
 </html>

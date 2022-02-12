@@ -4,8 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Livewire AUTH</title>
+    <title>{{ $title ?? 'Livewire Auth' }}</title>
     <link rel="icon" href="/favicon.ico" />
+    <!-- CSRF Token -->
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <link
         rel="stylesheet"
         href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&amp;display=fallback"
@@ -26,6 +28,7 @@
         rel="stylesheet"
         href="{{asset('/assets/vendor/adminlte/adminlte.min.css')}}"
     >
+    @livewireStyles
     @stack('page-css')
 </head>
 <body class="hold-transition sidebar-mini layout-fixed">
@@ -123,7 +126,7 @@
         </nav>
 
         <aside class="main-sidebar sidebar-dark-primary elevation-4">
-            <a href="/dashboard" class="brand-link">
+            <a href="{{ url('/dashboard') }}" class="brand-link">
                 <img src="/assets/images/logo.png" alt="logo" class="brand-image img-circle elevation-3"/>
                 <span class="brand-text font-weight-light">Beauty</span>
             </a>
@@ -271,7 +274,7 @@
                                             </a>
                                         </li>
                                         <li class="nav-item">
-                                            <a href="/auth/users" class="nav-link">
+                                            <a href="{{ url('/users') }}" class="nav-link">
                                                 <i class="fas fa-users nav-icon"></i>
                                                 <p>Users</p>
                                             </a>
@@ -282,12 +285,15 @@
                         </li>
 
                         <li class="nav-item">
-                            <a class="nav-link" href="#">
+                            <a class="nav-link" href="#" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
                                 <i class="nav-icon fas fa-power-off"></i>
                                 <p>
                                     Logout
                                 </p>
                             </a>
+                            <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
+                                @csrf
+                            </form>
                         </li>
                     </ul>
                 </nav>
@@ -315,6 +321,7 @@
     <script src="{{asset('/assets/vendor/adminlte/jquery.min.js')}}"></script>
     <script src="{{asset('/assets/vendor/adminlte/bootstrap.bundle.min.js')}}"></script>
     <script src="{{asset('/assets/vendor/adminlte/adminlte.min.js')}}"></script>
+    @livewireScripts
     @stack('page-js')
 </body>
 </html>

@@ -1,5 +1,3 @@
-@extends('layouts.dashboard')
-
 @push('page-css')
 @endpush
 

@@ -15,12 +15,31 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     return redirect('/auth/login');
+    // return view('welcome');
 });
 
-Route::get('/auth/login', function () {
-    return view('pages.auth.login');
+Route::get('/login', function () {
+    return redirect('/auth/login');
 });
 
-Route::get('/dashboard', function () {
-    return view('pages.dashboard.index');
+Route::group(['middleware' => 'guest', 'name' => 'cauth.'], function() {
+    Route::get('/auth/login', App\Http\Livewire\Auth\Login::class);
 });
+
+Route::group(['middleware' => 'auth', 'name' => 'dashboard.'], function() {
+    Route::get('/dashboard', App\Http\Livewire\Dashboard\Index::class)->name('index');
+    Route::group(
+        [
+            // 'middleware' => 'admin',
+            // 'namespace' => 'Diskusi',
+            'prefix' => 'users',
+            'name' => 'users.'
+        ],
+        function() {
+            Route::get('/', App\Http\Livewire\User\Index::class)->name('index');
+            Route::get('/create', App\Http\Livewire\User\Create::class)->name('create');
+        }
+    );
+});
+
+Auth::routes();
