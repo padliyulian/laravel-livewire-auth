@@ -27,7 +27,7 @@ Route::group(['middleware' => 'guest', 'name' => 'cauth.'], function() {
 });
 
 Route::group(['middleware' => 'auth', 'name' => 'dashboard.'], function() {
-    Route::get('/dashboard', App\Http\Livewire\Dashboard\Index::class)->name('index');
+    Route::get('/dashboard', App\Http\Livewire\Dashboard\Index::class);
     Route::group(
         [
             // 'middleware' => 'admin',
@@ -36,8 +36,8 @@ Route::group(['middleware' => 'auth', 'name' => 'dashboard.'], function() {
             'name' => 'users.'
         ],
         function() {
-            Route::get('/', App\Http\Livewire\User\Index::class)->name('index');
-            Route::get('/create', App\Http\Livewire\User\Create::class)->name('create');
+            Route::get('/', App\Http\Livewire\User\Index::class);
+            Route::get('/create', App\Http\Livewire\User\Create::class);
         }
     );
 });

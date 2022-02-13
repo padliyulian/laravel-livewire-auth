@@ -30,6 +30,7 @@
     >
     @livewireStyles
     @stack('page-css')
+    <script src="{{ asset('js/app.js') }}" defer></script>
 </head>
 <body class="hold-transition sidebar-mini layout-fixed">
 
@@ -300,7 +301,8 @@
             </div>
         </aside>
 
-        @yield('main')
+        {{-- @yield('main') --}}
+        {{ $slot }}
 
         <aside class="control-sidebar control-sidebar-dark">
             <div class="p-3">
@@ -322,6 +324,7 @@
     <script src="{{asset('/assets/vendor/adminlte/bootstrap.bundle.min.js')}}"></script>
     <script src="{{asset('/assets/vendor/adminlte/adminlte.min.js')}}"></script>
     @livewireScripts
+    {{-- <script src="https://cdn.jsdelivr.net/gh/livewire/turbolinks@v0.1.x/dist/livewire-turbolinks.js" data-turbolinks-eval="false"></script> --}}
     @stack('page-js')
 </body>
 </html>

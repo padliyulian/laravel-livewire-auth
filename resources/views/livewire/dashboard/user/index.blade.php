@@ -44,7 +44,7 @@
                         </a>
                     </div>
                     <div class="form-group col-lg-2">
-                        <a href="!#" class="btn btn-success btn-block">Reset</a>
+                        <a href="{{ url('/users') }}" class="btn btn-success btn-block">Reset</a>
                     </div>
                     <div class="form-group col-lg-2">
                         <select wire:model="length" name="limit" id="limit" class="custom-select">

@@ -51,9 +51,9 @@ class Index extends Component
         $users = $query->paginate($this->length);
 
         return view('livewire.dashboard.user.index', compact('users'))
-            // ->layout('layouts.dashboard', compact('title'));
-            ->extends('layouts.dashboard', compact('title'))
-            ->section('main');
+            ->layout('layouts.dashboard', compact('title'));
+            // ->extends('layouts.dashboard', compact('title'))
+            // ->section('body');
     }
 
     public function sortBy($field)
