@@ -83,10 +83,27 @@
                                 <tr>
                                     <td>{{ $item->name }}</td>
                                     <td>{{ $item->email }}</td>
-                                    <td>photo</td>
-                                    <td>role</td>
-                                    <td>{{ $item->created_at }}</td>
-                                    <td>actions</td>
+                                    <td>
+                                        <img src="{{ url(env('APP_URL').'/assets/images/'.$item->photo) }}" alt="" class="img-circle elevation-2" width="40">
+                                    </td>
+                                    <td>
+                                        {{ $item->roles[0]->name }}
+                                    </td>
+                                    <td>
+                                        {{ \Carbon\Carbon::parse($item->created_at)->format('d/m/Y') }}
+                                    </td>
+                                    <td>
+                                        <a href="#" title="Edit">
+                                            <span class="text-warning">
+                                                <i class="fa fa-edit" aria-hidden="true"></i>
+                                            </span>
+                                        </a>
+                                        <a href="#" title="Delete" class="js-btn--delete">
+                                            <span class="text-danger">
+                                                <i class="fa fa-trash" aria-hidden="true"></i>
+                                            </span>
+                                        </a>
+                                    </td>
                                 </tr>
                             @empty
                                 <tr>
