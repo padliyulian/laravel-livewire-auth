@@ -5,6 +5,7 @@ namespace App\Http\Livewire\User;
 use App\Models\User;
 use Livewire\Component;
 use Livewire\WithPagination;
+use Illuminate\Support\Facades\Storage;
 
 class Index extends Component
 {
@@ -37,7 +38,10 @@ class Index extends Component
 
     public function render()
     {
-        $title = 'Livewire | User';
+        $data['currentMenu1'] = 'settings';
+        $data['currentMenu2'] = 'auth';
+        $data['currentMenu3'] = 'users';
+        $data['title'] = 'Livewire | User';
 
         $query = User::orderBy($this->sortBy, $this->sortDirection);
 
@@ -51,7 +55,7 @@ class Index extends Component
         $users = $query->paginate($this->length);
 
         return view('livewire.dashboard.user.index', compact('users'))
-            ->layout('layouts.dashboard', compact('title'));
+            ->layout('layouts.dashboard', $data);
             // ->extends('layouts.dashboard', compact('title'))
             // ->section('body');
     }
@@ -72,4 +76,18 @@ class Index extends Component
             : 'asc';
     }
     
+
+    public function destroy($id)
+    {
+        $user = User::findOrFail($id);
+        if ($user) {
+            if ($user->delete()) {
+                if ($user->photo != null) {
+                    Storage::delete('/public/images/'.$user->photo);
+                }
+                session()->flash('message.success', 'Delete data successfully.');
+                return redirect()->to('/users');
+            }
+        }
+    }
 }

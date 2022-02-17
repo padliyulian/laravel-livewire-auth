@@ -8,7 +8,12 @@ class Index extends Component
 {
     public function render()
     {
-        $title = 'Livewire | Dashboard';
-        return view('livewire.dashboard.index')->layout('layouts.dashboard', compact('title'));
+        $data['currentMenu1'] = 'dashboard';
+        $data['currentMenu2'] = '';
+        $data['currentMenu3'] = '';
+        $data['title'] = 'Livewire | Dashboard';
+        
+        return view('livewire.dashboard.index')
+            ->layout('layouts.dashboard', $data);
     }
 }

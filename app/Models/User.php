@@ -15,6 +15,9 @@ class User extends Authenticatable
     use HasRoles;
     use HasApiTokens, HasFactory, Notifiable;
 
+    public const CREATED = 'created';
+    public const ACTIVE = 'active';
+
     /**
      * The attributes that are mass assignable.
      *
@@ -44,4 +47,13 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    public function getStatus()
+    {
+        if ($this->status === 2) {
+            return self::ACTIVE;
+        } else {
+            return self::CREATED;
+        }
+    }
 }

@@ -7,6 +7,9 @@
 @endpush
 
 <div class="content-wrapper">
+    @if (session()->has('message.success'))
+        <input type="hidden" name="message-success" id="message-success" value="{{ session('message.success') }}">
+    @endif
     <section class="content-header">
         <div class="container-fluid">
             <div class="row mb-2">
@@ -71,6 +74,7 @@
                                 </th>
                                 <th>Photo</th>
                                 <th>Role</th>
+                                <th>Status</th>
                                 <th class="c--pointer" wire:click="sortBy('created_at')">
                                     <i class="fas fa-sort"></i>
                                     Created
@@ -84,25 +88,44 @@
                                     <td>{{ $item->name }}</td>
                                     <td>{{ $item->email }}</td>
                                     <td>
-                                        <img src="{{ url(env('APP_URL').'/assets/images/'.$item->photo) }}" alt="" class="img-circle elevation-2" width="40">
+                                        @if ($item->photo)
+                                            <img src="{{ url(env('APP_URL').'/storage/images/'.$item->photo) }}" alt="" class="img-circle elevation-2" width="40">
+                                        @else 
+                                            <img src="{{ url(env('APP_URL').'/storage/images/default.png') }}" alt="" class="img-circle elevation-2" width="40">
+                                        @endif
                                     </td>
                                     <td>
                                         {{ $item->roles[0]->name }}
                                     </td>
                                     <td>
+                                        @if ($item->getStatus() === 'active')
+                                            <span class="badge px-2 py-1 badge-pill badge-success">
+                                                {{ $item->getStatus() }}
+                                            </span>
+                                        @endif
+                                        @if ($item->getStatus() === 'created')
+                                            <span class="badge px-2 py-1 badge-pill badge-warning text-white">
+                                                {{ $item->getStatus() }}
+                                            </span>
+                                        @endif
+                                    </td>
+                                    <td>
                                         {{ \Carbon\Carbon::parse($item->created_at)->format('d/m/Y') }}
                                     </td>
                                     <td>
-                                        <a href="#" title="Edit">
+                                        <a href="{{ url('/users/edit/'.$item->id) }}" href="#" title="Edit">
                                             <span class="text-warning">
                                                 <i class="fa fa-edit" aria-hidden="true"></i>
                                             </span>
                                         </a>
-                                        <a href="#" title="Delete" class="js-btn--delete">
-                                            <span class="text-danger">
-                                                <i class="fa fa-trash" aria-hidden="true"></i>
-                                            </span>
-                                        </a>
+
+                                        <span wire:click="destroy({{$item->id}})">
+                                            <a href="#" title="Delete" class="js-btn--delete">
+                                                <span class="text-danger">
+                                                    <i class="fa fa-trash" aria-hidden="true"></i>
+                                                </span>
+                                            </a>
+                                        </span>
                                     </td>
                                 </tr>
                             @empty
@@ -120,3 +143,15 @@
         </div>
     </section>
 </div>
+
+@push('page-js')
+    <script>
+        if ($('#message-success').val()) {
+            Swal.fire(
+                'Success',
+                `${$('#message-success').val()}`,
+                'success'
+            )
+        }
+    </script>
+@endpush

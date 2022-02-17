@@ -38,6 +38,7 @@ Route::group(['middleware' => 'auth', 'name' => 'dashboard.'], function() {
         function() {
             Route::get('/', App\Http\Livewire\User\Index::class);
             Route::get('/create', App\Http\Livewire\User\Create::class);
+            Route::get('/edit/{id}', App\Http\Livewire\User\Edit::class);
         }
     );
 });

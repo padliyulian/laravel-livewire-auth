@@ -11,7 +11,7 @@
                             <a href="{{ url('/users') }}">Users</a>
                         </li>
                         <li class="breadcrumb-item active">
-                            Add
+                            Edit
                         </li>
                     </ol>
                 </div>
@@ -34,7 +34,7 @@
                         </div>
                     </div>
                     <div class="card-body">             
-                        <form wire:submit.prevent="store()" action="{{ url('/users') }}" method="POST" encType="multipart/form-data">
+                        <form wire:submit.prevent="update({{$idUser}})" action="{{ url('/users') }}" method="POST" encType="multipart/form-data">
                             @csrf
                             <div class="row">
                                 <div class="form-group col-lg-12">
@@ -123,7 +123,7 @@
                                     @enderror
                                 </div>
                                 <div class="form-group col-lg-12">
-                                    <button type="submit" class="btn btn-primary">Save</button>
+                                    <button type="submit" class="btn btn-primary">Update</button>
                                 </div>
                             </div>
                         </form>

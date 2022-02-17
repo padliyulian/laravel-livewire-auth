@@ -6,13 +6,15 @@ use App\Models\Role;
 use App\Models\User;
 use Livewire\Component;
 use Livewire\WithFileUploads;
+use Illuminate\Support\Facades\Storage;
 
-class Create extends Component
+class Edit extends Component
 {
     use WithFileUploads;
 
     public $roles;
 
+    public $idUser;
     public $name = '';
     public $email = '';
     public $password = '';
@@ -23,23 +25,39 @@ class Create extends Component
     public $status = '';
     public $photo;
 
+    public function mount($id)
+    {
+        $user = User::findOrFail($id);
+        $this->roles = Role::select('id','name')->get();
+        
+        if ($user) {
+            $this->idUser   = $user->id;
+            $this->name   = $user->name;
+            $this->email   = $user->email;
+            $this->address   = $user->address;
+            $this->phone   = $user->phone;
+            $this->role   = $user->role;
+            $this->status   = $user->status;
+        }
+    }
+
     public function render()
     {
         $data['currentMenu1'] = 'settings';
         $data['currentMenu2'] = 'auth';
         $data['currentMenu3'] = 'users';
         $data['title'] = 'Livewire | User';
-        $this->roles =  Role::select('id','name')->get();
 
-        return view('livewire.dashboard.user.create')->layout('layouts.dashboard', $data);
+        return view('livewire.dashboard.user.edit')
+            ->layout('layouts.dashboard', $data);
     }
 
-    public function store()
+    public function update($id)
     {
         $this->validate([
             'name' => 'required|max:100',
-            'email' => 'required|email|max:100|unique:users,email',
-            'password' => 'required|confirmed|min:8|max:100',
+            'email' => 'required|email|max:100|unique:users,email,'.$id,
+            'password' => 'nullable|confirmed|min:8|max:100',
             'address' => 'required|max:500',
             'phone' => 'required|max:20',
             'role' => 'required',
@@ -47,41 +65,34 @@ class Create extends Component
             'photo' => 'nullable|image|max:1024|image|mimes:jpeg,png,jpg',
         ]);
 
-        $user = new User;
+        $user = User::findOrFail($id);
         $user->name = $this->name;
         $user->email = $this->email;
         $user->address = $this->address;
         $user->phone = $this->phone;
         $user->status = $this->status;
-        $user->password = bcrypt($this->password);
+        
+        if ($this->password) {
+            $user->password = bcrypt($this->password);
+        }
 
         if ($this->photo) {
+            if ($user->photo != null) {
+                Storage::delete('/public/images/'.$user->photo);
+            }
+            
             $filename = uniqid();
             $fileExt = $this->photo->getClientOriginalExtension();
             $fileNameToStore = $filename.'_'.time().'.'.$fileExt;
             $this->photo->storePubliclyAs('/public/images', $fileNameToStore);
-            // $this->photo->storeAs('/public/images', $fileNameToStore);
 
             $user->photo = $fileNameToStore;
         }
 
-        if ($user->save()) {
-            $user->assignRole($this->role);
-            $this->__clearForm();
-
-            session()->flash('message.success', 'Add data successfully.');
+        if ($user->update()) {
+            $user->syncRoles($this->role);
+            session()->flash('message.success', 'Update data successfully.');
             return redirect()->to('/users');
         }
-    }
-
-    public function __clearForm()
-    {
-        $this->name = '';
-        $this->email = '';
-        $this->address = 'address';
-        $this->phone = '';
-        $this->role = '';
-        $this->status = '';
-        $this->password = '';
     }
 }

@@ -135,17 +135,23 @@
             <div class="sidebar">
                 <div class="user-panel mt-3 pb-3 mb-3 d-flex">
                     <div class="image">
-                        <img src="/assets/images/woman.png" class="img-circle elevation-2" alt="avatar"/>
+                        @if (auth()->user()->photo)
+                            <img src="{{ url(env('APP_URL').'/storage/images/'.auth()->user()->photo) }}" class="img-circle elevation-2" alt="avatar"/>
+                        @else
+                            <img src="/assets/images/woman.png" class="img-circle elevation-2" alt="avatar"/>
+                        @endif
                     </div>
                     <div class="info">
-                        <a href="#" class="d-block">username</a>
+                        <a href="#" class="d-block">
+                            {{ auth()->user()->name ?? 'username' }}
+                        </a>
                     </div>
                 </div>
 
                 <nav class="mt-2">
                     <ul class="nav nav-pills nav-sidebar flex-column nav-child-indent" data-widget="treeview" role="menu" data-accordion="false">
                         <li class="nav-item">
-                            <a href="/dashboard" class="nav-link">
+                            <a href="{{url('/dashboard')}}" class="nav-link {{$currentMenu1 === 'dashboard' ? 'active':''}}">
                                 <i class="nav-icon fas fa-tachometer-alt"></i>
                                 <p>Dashboard</p>
                             </a>
@@ -244,7 +250,7 @@
                             </ul>
                         </li>
 
-                        <li class="nav-item has-treeview">
+                        <li class="nav-item has-treeview {{$currentMenu1 == 'settings' ? 'menu-open':''}}">
                             <a href="#" class="nav-link">
                                 <i class="nav-icon fas fa-cogs"></i>
                                 <p>
@@ -253,7 +259,7 @@
                                 </p>
                             </a>
                             <ul class="nav nav-treeview">
-                                <li class="nav-item has-treeview">
+                                <li class="nav-item has-treeview {{$currentMenu2 == 'auth' ? 'menu-open':''}}">
                                     <a href="#" class="nav-link">
                                         <i class="fas fa-users-cog nav-icon"></i>
                                         <p>
@@ -274,8 +280,8 @@
                                                 <p>Permissions</p>
                                             </a>
                                         </li>
-                                        <li class="nav-item">
-                                            <a href="{{ url('/users') }}" class="nav-link">
+                                        <li class="nav-item ">
+                                            <a href="{{ url('/users') }}" class="nav-link {{$currentMenu3 === 'users' ? 'active':''}}">
                                                 <i class="fas fa-users nav-icon"></i>
                                                 <p>Users</p>
                                             </a>
@@ -323,8 +329,31 @@
     <script src="{{asset('/assets/vendor/adminlte/jquery.min.js')}}"></script>
     <script src="{{asset('/assets/vendor/adminlte/bootstrap.bundle.min.js')}}"></script>
     <script src="{{asset('/assets/vendor/adminlte/adminlte.min.js')}}"></script>
+    <script src="{{asset('/assets/vendor/sweetalert/sweetalert2@10.js')}}"></script>
     @livewireScripts
-    {{-- <script src="https://cdn.jsdelivr.net/gh/livewire/turbolinks@v0.1.x/dist/livewire-turbolinks.js" data-turbolinks-eval="false"></script> --}}
+    <script src="https://cdn.jsdelivr.net/gh/livewire/turbolinks@v0.1.x/dist/livewire-turbolinks.js" data-turbolinks-eval="false"></script>
+    <script>
+        $(document).ready(function(){
+            $('.js-btn--delete').on('click', function(ev){
+                ev.preventDefault()
+                ev.stopPropagation()
+                Swal.fire({
+                        title: 'Are you sure?',
+                        text: "You won't be able to revert this!",
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonColor: '#3085d6',
+                        cancelButtonColor: '#d33',
+                        confirmButtonText: 'Yes, delete!',
+                        reverseButtons: true
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            $(this).parent().click()
+                        }
+                    })
+            })
+        })
+    </script>
     @stack('page-js')
 </body>
 </html>
