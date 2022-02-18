@@ -250,6 +250,7 @@
                             </ul>
                         </li>
 
+                        @hasrole('admin')
                         <li class="nav-item has-treeview {{$currentMenu1 == 'settings' ? 'menu-open':''}}">
                             <a href="#" class="nav-link">
                                 <i class="nav-icon fas fa-cogs"></i>
@@ -290,6 +291,7 @@
                                 </li>
                             </ul>
                         </li>
+                        @endhasrole
 
                         <li class="nav-item">
                             <a class="nav-link" href="#" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
