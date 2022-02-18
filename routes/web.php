@@ -30,6 +30,18 @@ Route::group(['middleware' => 'auth', 'name' => 'dashboard.'], function() {
     Route::get('/dashboard', App\Http\Livewire\Dashboard\Index::class);
     Route::group(
         [
+            'prefix' => 'roles',
+            'name' => 'roles.'
+        ],
+        function() {
+            Route::get('/', App\Http\Livewire\Role\Index::class);
+            Route::get('/create', App\Http\Livewire\Role\Create::class);
+            Route::get('/edit/{id}', App\Http\Livewire\Role\Edit::class);
+            Route::get('/permissions/{id}', App\Http\Livewire\Role\Permission::class);
+        }
+    );
+    Route::group(
+        [
             // 'middleware' => 'admin',
             // 'namespace' => 'Diskusi',
             'prefix' => 'users',

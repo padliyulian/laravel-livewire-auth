@@ -14,12 +14,12 @@
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-6">
-                    <h1>Users</h1>
+                    <h1>Roles</h1>
                 </div>
                 <div class="col-sm-6">
                     <ol class="breadcrumb float-sm-right">
                         <li class="breadcrumb-item active">
-                            Users
+                            Roles
                         </li>
                     </ol>
                 </div>
@@ -42,16 +42,16 @@
             <div class="card-body">
                 <div class="row">
                     <div class="form-group col-lg-2">
-                        <a href="{{ url('/users/create') }}" class="btn btn-primary btn-block">
+                        <a href="{{ url('/roles/create') }}" class="btn btn-primary btn-block">
                             Tambah
                         </a>
                     </div>
                     <div class="form-group col-lg-2">
-                        <a href="{{ url('/users') }}" class="btn btn-success btn-block">Reset</a>
+                        <a href="{{ url('/roles') }}" class="btn btn-success btn-block">Reset</a>
                     </div>
                     <div class="form-group col-lg-2">
                         <select wire:model="length" name="limit" id="limit" class="custom-select">
-                            <option value="2">2</option>
+                            <option value="10">10</option>
                             <option value="25">25</option>
                             <option value="50">50</option>
                         </select>
@@ -68,13 +68,10 @@
                                     <i class="fas fa-sort"></i>
                                     Name
                                 </th>
-                                <th class="c--pointer" wire:click="sortBy('email')">
+                                <th class="c--pointer" wire:click="sortBy('guard_name')">
                                     <i class="fas fa-sort"></i>
-                                    Email
+                                    Guard Name
                                 </th>
-                                <th>Photo</th>
-                                <th>Role</th>
-                                <th>Status</th>
                                 <th class="c--pointer" wire:click="sortBy('created_at')">
                                     <i class="fas fa-sort"></i>
                                     Created
@@ -83,42 +80,24 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @forelse ($users as $item)
+                            @forelse ($roles as $item)
                                 <tr>
                                     <td>{{ $item->name }}</td>
-                                    <td>{{ $item->email }}</td>
-                                    <td>
-                                        @if ($item->photo)
-                                            <img src="{{ url(env('APP_URL').'/storage/images/'.$item->photo) }}" alt="" class="img-circle elevation-2" width="40">
-                                        @else 
-                                            <img src="{{ url(env('APP_URL').'/storage/images/default.png') }}" alt="" class="img-circle elevation-2" width="40">
-                                        @endif
-                                    </td>
-                                    <td>
-                                        {{ $item->roles[0]->name }}
-                                    </td>
-                                    <td>
-                                        @if ($item->getStatus() === 'active')
-                                            <span class="badge px-2 py-1 badge-pill badge-success">
-                                                {{ $item->getStatus() }}
-                                            </span>
-                                        @endif
-                                        @if ($item->getStatus() === 'created')
-                                            <span class="badge px-2 py-1 badge-pill badge-warning text-white">
-                                                {{ $item->getStatus() }}
-                                            </span>
-                                        @endif
-                                    </td>
+                                    <td>{{ $item->guard_name }}</td>
                                     <td>
                                         {{ \Carbon\Carbon::parse($item->created_at)->format('d/m/Y') }}
                                     </td>
                                     <td>
-                                        <a href="{{ url('/users/edit/'.$item->id) }}" href="#" title="Edit">
+                                        <a href="{{url('/roles/permissions/'.$item->id)}}" title="Permission">
+                                            <span class="text-primary">
+                                                <i class="fas fa-user-shield" aria-hidden="true"></i>
+                                            </span>
+                                        </a>
+                                        <a href="{{ url('/roles/edit/'.$item->id) }}" href="#" title="Edit">
                                             <span class="text-warning">
                                                 <i class="fa fa-edit" aria-hidden="true"></i>
                                             </span>
                                         </a>
-
                                         <span wire:click="destroy({{$item->id}})">
                                             <a href="#" title="Delete" class="js-btn--delete">
                                                 <span class="text-danger">
@@ -135,7 +114,7 @@
                             @endforelse
                         </tbody>
                     </table>
-                    {{ $users->links('vendor.livewire.bootstrap') }}
+                    {{ $roles->links('vendor.livewire.bootstrap') }}
                 </div>
             </div>
             <div class="card-footer">

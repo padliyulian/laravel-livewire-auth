@@ -269,7 +269,7 @@
                                     </a>
                                     <ul class="nav nav-treeview">
                                         <li class="nav-item">
-                                            <a href="/dashboard/roles" class="nav-link">
+                                            <a href="{{url('/roles')}}" class="nav-link {{$currentMenu3 === 'roles' ? 'active':''}}">
                                                 <i class="fas fa-user-shield nav-icon"></i>
                                                 <p>Roles</p>
                                             </a>

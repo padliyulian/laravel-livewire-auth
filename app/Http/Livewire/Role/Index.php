@@ -1,30 +1,21 @@
 <?php
 
-namespace App\Http\Livewire\User;
+namespace App\Http\Livewire\Role;
 
-use App\Models\User;
+use App\Models\Role;
 use Livewire\Component;
 use Livewire\WithPagination;
-use Illuminate\Support\Facades\Storage;
 
 class Index extends Component
 {
     use WithPagination;
 
-    public $length = 25;
+    public $length = 10;
     public $sortBy = 'id';
     public $sortDirection = 'desc';
     public $search = '';
 
     protected $paginationTheme = 'bootstrap';
-    // protected $updateQueryString = [
-    //     'search'
-    // ];
-
-    // public function mount()
-    // {
-    //     $this->search = request()->query('search', $this->search);
-    // }
 
     public function updatingLength()
     {
@@ -40,24 +31,21 @@ class Index extends Component
     {
         $data['currentMenu1'] = 'settings';
         $data['currentMenu2'] = 'auth';
-        $data['currentMenu3'] = 'users';
-        $data['title'] = 'Livewire | User';
+        $data['currentMenu3'] = 'roles';
+        $data['title'] = 'Livewire | Role';
 
-        $query = User::orderBy($this->sortBy, $this->sortDirection);
+        $query = Role::orderBy($this->sortBy, $this->sortDirection);
 
         if ($this->search !== '') {
             $query->where(function($query) {
-                $query->where('name', 'like', '%' . $this->search . '%')
-                    ->orWhere('email', 'like', '%' . $this->search . '%');
+                $query->where('name', 'like', '%' . $this->search . '%');
             });
         }
 
-        $users = $query->paginate($this->length);
+        $roles = $query->paginate($this->length);
 
-        return view('livewire.dashboard.user.index', compact('users'))
+        return view('livewire.dashboard.role.index', compact('roles'))
             ->layout('layouts.dashboard', $data);
-            // ->extends('layouts.dashboard', compact('title'))
-            // ->section('body');
     }
 
     public function sortBy($field)
@@ -79,14 +67,11 @@ class Index extends Component
 
     public function destroy($id)
     {
-        $user = User::findOrFail($id);
-        if ($user) {
-            if ($user->delete()) {
-                if ($user->photo != null) {
-                    Storage::delete('/public/images/'.$user->photo);
-                }
+        $role = Role::findOrFail($id);
+        if ($role) {
+            if ($role->delete()) {
                 session()->flash('message.success', 'Delete data successfully.');
-                return redirect()->to('/users');
+                return redirect()->to('/roles');
             }
         }
     }
