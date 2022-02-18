@@ -275,7 +275,7 @@
                                             </a>
                                         </li>
                                         <li class="nav-item">
-                                            <a href="/auth/permissions" class="nav-link">
+                                            <a href="{{url('/permissions')}}" class="nav-link {{$currentMenu3 === 'permissions' ? 'active':''}}">
                                                 <i class="fas fa-user-cog nav-icon"></i>
                                                 <p>Permissions</p>
                                             </a>

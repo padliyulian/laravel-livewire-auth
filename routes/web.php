@@ -40,6 +40,19 @@ Route::group(['middleware' => 'auth', 'name' => 'dashboard.'], function() {
             Route::get('/permissions/{id}', App\Http\Livewire\Role\Permission::class);
         }
     );
+
+    Route::group(
+        [
+            'prefix' => 'permissions',
+            'name' => 'permissions.'
+        ],
+        function() {
+            Route::get('/', App\Http\Livewire\Permission\Index::class);
+            Route::get('/create', App\Http\Livewire\Permission\Create::class);
+            Route::get('/edit/{id}', App\Http\Livewire\Permission\Edit::class);
+        }
+    );
+
     Route::group(
         [
             // 'middleware' => 'admin',
