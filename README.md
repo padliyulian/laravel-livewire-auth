@@ -1,3 +1,9 @@
+# feature
+- livewire
+- bootsrap adminlte
+- SPA
+- laravel spatie
+
 # local setup
 - composer install
 - npm install / yarn install
